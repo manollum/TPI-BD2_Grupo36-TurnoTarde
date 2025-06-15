@@ -1,5 +1,3 @@
---1) PARTE LEO
-
 --CREACION DE LA BASE DE DATOS
 
 CREATE DATABASE EstacionamientoDB
@@ -151,10 +149,9 @@ GROUP BY CAST(FechaHoraIngreso AS DATE)
 ORDER BY [Fecha] DESC
 GO
 
----------------------------------------------------------------------------------
 
---2)PARTE MANU
 
+-- PROCEDIMIENTOS ALMACENADOS
 
 -- PROCEDIMIENTO PARA REGISTRAR INGRESO DE UN VEHICULO
 CREATE PROCEDURE SP_REGISTRAR_INGRESO(
@@ -176,8 +173,8 @@ BEGIN
         -- Validar que exista
         IF @IDVehiculo IS NULL
         BEGIN
-            RAISERROR('Patente inexistente en sistema.', 16, 1);
-            RETURN;
+            RAISERROR('Patente inexistente en sistema.', 16, 1)
+            RETURN
         END
 
         -- Buscar un espacio libre
@@ -188,7 +185,7 @@ BEGIN
         -- Validar que haya un espacio libre
         IF @IDEspacioLibre IS NULL
         BEGIN
-            RAISERROR('No hay espacios libres disponibles.', 16, 1);
+            RAISERROR('No hay espacios libres disponibles.', 16, 1)
             RETURN;
         END
 
@@ -199,7 +196,7 @@ BEGIN
             AND FechaHoraSalida IS NULL
         )
         BEGIN
-            RAISERROR('El espacio está ocupado actualmente.', 16, 1);
+            RAISERROR('El espacio está ocupado actualmente.', 16, 1)
             RETURN;
         END
 
@@ -293,7 +290,7 @@ BEGIN
         -- Validar que exista
         IF @IDVehiculo IS NULL
         BEGIN
-            RAISERROR('Patente inexistente en sistema.', 16, 1);
+            RAISERROR('Patente inexistente en sistema.', 16, 1)
             RETURN;
         END
 
@@ -307,7 +304,7 @@ BEGIN
         -- Validar que haya una salida pendiente
         IF @IDRegistro IS NULL
         BEGIN
-            RAISERROR('No existen salidas por registrar.', 16, 1);
+            RAISERROR('No existen salidas por registrar.', 16, 1)
             RETURN;
         END
 
@@ -338,11 +335,6 @@ BEGIN
     END CATCH
 END
 GO
-
-
---------------------------------------------------------------------------------------------------------
-
---3)PARTE GERMAN 
 
 -- TRIGGERS
 
@@ -399,7 +391,7 @@ BEGIN
         BEGIN
             UPDATE Espacio
             SET Estado = 1
-            WHERE IDEspacio = @IDEspacio;
+            WHERE IDEspacio = @IDEspacio
         END
 
         COMMIT TRANSACTION
@@ -407,7 +399,7 @@ BEGIN
     BEGIN CATCH
 		IF @@TRANCOUNT > 0
         ROLLBACK TRANSACTION
-        RAISERROR('Error en TR_LiberarEspacio. Operación fallida.', 16, 1);
+        RAISERROR('Error en TR_LiberarEspacio. Operación fallida.', 16, 1)
     END CATCH
 END
 GO
